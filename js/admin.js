@@ -1,0 +1,1 @@
+import {getContents,createContent,updateContent,deleteContent} from "./api.js";
