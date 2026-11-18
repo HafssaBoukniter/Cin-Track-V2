@@ -17,6 +17,8 @@ export async function request(path,options = {}) {
 
         errorEl.textContent = "Une erreur est survenue lors du chargement des données.";
         errorEl.classList.remove("hidden");
+
+        throw error;
     }
 }
 
@@ -24,4 +26,5 @@ export const getContents = () => request("/content");
 export const createContent = (data) => request("/content",{method : "POST",body : JSON.stringify(data)});
 export const updateContent = (id,data) => request(`/content/${id}`,{method : "PUT",body : JSON.stringify(data)});
 export const deleteContent = (id) => request(`/content/${id}`,{method : "DELETE"});
-export const getComments = () => request("/comments");
+export const getComments = (id) => request(`/content/${id}/comments`);
+export const createComments = (id,data) => request(`/content/${id}/comments`,{method : "POST",body : JSON.stringify(data)});

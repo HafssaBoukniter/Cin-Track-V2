@@ -3,9 +3,166 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CinéTrack-admin</title>
+    <title>CinéTrack-catalogue de films et séries</title>
+    <link rel="stylesheet" href="./css/output.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.1/css/all.css"
+        integrity="sha512-x9WwyMYBnlXMNQ6kQ/Lyzu1NqIhLQKL5Oq6xByfXuRj7s9CskyCbLv/1IjqzJmXwFXWr0ov6jBV7Qbc0hh9nHg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer">
 </head>
-<body>
-    
+<body class="bg-purple-900 text-white min-h-screen">
+    <!--hedaer-->
+    <header class="border-b border-purple-800 text-white px-0">
+        <nav class="w-full px-3 py-2 lg:px-7 lg:py-5 flex items-center justify-between">
+            <a href="index.html" class="flex items-center gap-3">
+                <i class="fa-solid fa-clapperboard text-sm lg:text-3xl text-purple-500"></i>
+                <div>
+                    <h1 class="text-sm md:text-xl lg:text-2xl font-bold">Ciné<span class="text-purple-500">Track</span></h1>
+                </div>
+            </a>
+            <div class="flex ">
+                <form id="form-recherche" class="w-70 lg:w-125">
+                    <div class="flex-1 flex items-center gap-3 bg-transparent border border-purple-600 rounded-xl ms-5 lg:ms-0 px-3 lg:px-4">
+                        <i class="text-sm lg:text-2xl fa-solid fa-magnifying-glass text-purple-400"></i>
+                        <input type="search" name="search" id="search-admin" placeholder="Rechercher un film ou une série..." class="w-full bg-transparent outline-none py-2 lg:py-4 text-white placeholder-gray-400">
+                    </div>
+                </form>
+                <button class="text-end favorire-btn px-3 py-1 font-semibold">
+                    <a href="index.html"><i class="fa-solid md:text-xl lg:text-3xl fa-table-cells"></i></a>
+                </button>
+            </div>
+        </nav>
+    </header>
+    <!--main-->
+     <main class="w-full flex flex-col md:grid md:grid-cols-[1fr_400px] px-7 py-5 gap-5">
+        <section class="min-w-0">
+            <!-- tableau -->
+            <div class="w-full text-left border border-purple-700 rounded-xl p-2">
+                <table id="content-table" class="w-full bg-brand-soft">
+                    <thead>
+                        <tr>
+                            <th class="bg-purple-800 p-3">Contenu</th>
+                            <th class="bg-purple-800 p-3">Type</th>
+                            <th class="bg-purple-800 p-3">Annee</th>
+                            <th class="bg-purple-800 p-3">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+
+            <!--loading-->
+            <p id="loading" class="hidden text-purple-300 py-10">Chargement...</p>
+
+            <!--Error-->
+            <p id="error" class="hidden text-purple-300 py-10"></p>
+
+            <!-- pagination -->
+            <section id="admin-pagination" class="flex justify-center items-center gap-3 mt-8"></section>
+        </section>
+
+        <!--favorites-->  
+        <aside id="aside" class="w-full h-fit bg-purple-800 border border-purple-700 rounded-xl px-5 py-3">
+            <h2 class="text-xl font-bold border-b border-purple-600 p-4">Ajouter Contenu</h2>
+            <div class="flex border border-purple-700 bg-brand-soft p-1 rounded-full mt-3 mb-4">
+                <button id="movie-form" type="button" class="flex-1 py-2 text-sm font-medium rounded-full bg-purple-400 text-white transition-all">
+                    Movie
+                </button>
+                <button id="serie-form" type="button" class="flex-1 py-2 text-sm font-medium rounded-full text-brand-body transition-all">
+                    Série
+                </button>
+            </div>
+            <form id="movie-content" class="flex flex-col border border-purple-700 rounded-xl p-2">
+                <div class="flex flex-col bg-brand-soft p-1 gap-2 rounded-full mb-2">
+                    <label for="title">Titre</label>
+                    <input type="text" id="title" placeholder="" class="border border-purple-600 rounded-lg px-3 py-2 outline-0">
+                </div>
+                <div class="flex flex-col bg-brand-soft gap-2 p-1 rounded-full mt-3 mb-2">
+                    <label for="type">Type</label>
+                    <input type="text" id="type" placeholder="" class="border border-purple-600 rounded-lg px-3 py-2 outline-0">
+                </div>
+                <div class="flex flex-col bg-brand-soft gap-2 p-1 rounded-full mt-3 mb-2">
+                    <label for="year">Année</label>
+                    <input type="number" id="year" class="border border-purple-600 rounded-lg px-3 py-2 outline-0">
+                </div>
+                <div class="flex flex-col bg-brand-soft gap-2 p-1 rounded-full mt-3 mb-2">
+                    <label for="duration">Durée</label>
+                    <input type="number" id="duration" class="border border-purple-600 rounded-lg px-3 py-2 outline-0">
+                </div>
+                <div class="flex flex-col bg-brand-soft gap-2 p-1 rounded-full mt-3 mb-2">
+                    <label for="image">Image</label>
+                    <input type="text" id="image" class="border border-purple-600 rounded-lg px-3 py-2 outline-0">
+                </div>
+                <div class="flex flex-col bg-brand-soft gap-2 p-1 rounded-full mt-3 mb-2">
+                    <label for="discription">Discription</label>
+                    <input type="text" id="discription" class="border border-purple-600 rounded-lg px-3 py-2 outline-0">
+                </div>
+                <div class="flex flex-col bg-brand-soft gap-2 p-1 rounded-full mt-3 mb-2">
+                    <label for="genre">Genre</label>
+                    <select name="genre" id="genre" class="border border-purple-600 rounded-lg px-3 py-2 outline-0"></select>
+                </div>
+                <div class="flex flex-col bg-brand-soft gap-2 p-1 rounded-full mt-3 mb-2">
+                    <label for="directors">Directeur</label>
+                    <select name="genre" id="directors" gap-2 class="border border-purple-600 rounded-lg px-3 py-2 outline-0"></select>
+                </div>
+                <div class="flex flex-col bg-brand-soft gap-2 p-1 rounded-full mt-3 mb-2">
+                    <label for="productionCountries">Pays producteurs</label>
+                    <select name="genre" id="productionCountries" class="border border-purple-600 rounded-lg px-3 py-2 outline-0"></select>
+                </div>
+
+            </form>
+            <form id="serie-content" class="hidden">
+                <div>
+                    <label for="title"></label>
+                    <input type="text" id="title">
+                </div>
+                <div>
+                    <label for="type"></label>
+                    <input type="text" id="type">
+                </div>
+                <div>
+                    <label for="year"></label>
+                    <input type="number" id="year">
+                </div>
+                <div>
+                    <label for="duration"></label>
+                    <input type="number" id="duration">
+                </div>
+                <div>
+                    <label for="image"></label>
+                    <input type="text" id="image">
+                </div>
+                <div>
+                    <label for="discription"></label>
+                    <input type="text" id="discription">
+                </div>
+                <div>
+                    <label for="genre"></label>
+                    <select name="genre" id="genre"></select>
+                </div>
+                <div>
+                    <label for="directors"></label>
+                    <select name="genre" id="directors"></select>
+                </div>
+                <div>
+                    <label for="productionCountries"></label>
+                    <select name="genre" id="productionCountries"></select>
+                </div>
+
+            </form>
+            <!--message-->
+            <p id="message" class="hidden text-center text-gray-400 py-12"></p>
+        </aside>
+    </main>
+
+    <!--footer-->
+    <footer class="border-t border-purple-800 mt-12 py-6 text-ce">
+        <div class="max-w-7xl mx-auto px-6 py-5 text-center text-sm text-white">
+            &copy; 2026 CinéTrack — Discover. Watch. Enjoy
+        </div>
+    </footer>
+
+    <script type="module" src="./js/admin.js"></script>
 </body>
 </html>
