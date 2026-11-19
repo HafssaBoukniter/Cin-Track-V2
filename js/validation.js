@@ -1,19 +1,19 @@
-export function validerMovie(data){
-    const currentYear = new Date().getFullYear;
-    const erreur = {};
+const erreur = {};
+const currentYear = new Date().getFullYear;
 
+export function validerMovie(data){
     if(!data.title.trim()){
         erreur.title = "Le titre est obligatoire.";
     }
 
-    if(!data.releasYear){
+    if(data.releasYear === ""){
         erreur.releaseYear = "L'année est obligatoire.";
     }else if(data.releasYear < 1900 || data.releasYear > currentYear){
         erreur.releaseYear = `L'année doit être entre 1900 et ${currentYear}.`;
     }
 
     const url = new URL(data.image);
-    if(url.protocol !== "http" && url.protocol !== "https"){
+    if(url.protocol !== "http:" && url.protocol !== "https:"){
         erreur.image = "URL d'image invalide.";
     }
 
@@ -28,29 +28,26 @@ export function validerMovie(data){
 }
 
 export function validerSerie(data){
-    const currentYear = new Date().getFullYear;
-
     if(!data.title.trim()){
         erreur.title = "Le titre est obligatoire.";
     }
 
-    if(!data.releasYear){
+    if(data.releasYear === ""){
         erreur.releaseYear = "L'année est obligatoire.";
     }else if(data.releasYear < 1900 || data.releasYear > currentYear){
         erreur.releaseYear = `L'année doit être entre 1900 et ${currentYear}.`;
     }
 
     const url = new URL(data.image);
-    if(url.protocol !== "http" && url.protocol !== "https"){
+    if(url.protocol !== "http:" && url.protocol !== "https:"){
         erreur.image = "URL d'image invalide.";
     }
 
     if(!data.seasons.length){
         erreur.seasons = "Le nombre de saisons est obligatoire.";
     }else{
-        const seasons = data.seasons.split(",").map(s => s.trim());
 
-        if(seasons.some(s => s==="" || Number(s) <= 0)){
+        if(data.seasons.some(s => s==="" || Number(s) <= 0)){
             erreur.seasons = "Veuillez saisir des saisons valides.";
         }
     }

@@ -72,7 +72,7 @@ export function rendreModalModifier(item){
                     </div>
                     <div class="flex flex-col bg-brand-soft gap-2 p-1 rounded-full mt-3 mb-2">
                         <label for="movie-genreM">Genre</label>
-                        <input name="movie-genre" id="movie-genresM" placeholder="Genres (séparés par des virgules)"  class="border border-purple-600 rounded-lg px-3 py-2 outline-0">
+                        <input name="movie-genres" id="movie-genresM" placeholder="Genres (séparés par des virgules)"  class="border border-purple-600 rounded-lg px-3 py-2 outline-0">
                     </div>
                     <div class="flex flex-col bg-brand-soft gap-2 p-1 rounded-full mt-3 mb-2">
                         <label for="movie-directorsM">Directeur</label>
@@ -121,7 +121,7 @@ export function rendreModalModifier(item){
                         </div>
                     <div class="flex flex-col bg-brand-soft gap-2 p-1 rounded-full mt-3 mb-2">
                         <label for="serie-seasonsM">Seasons</label>
-                        <input type="number" id="serie-seasonsM" placeholder="Seasons (séparés par des virgules)" class="border border-purple-600 rounded-lg px-3 py-2 outline-0">
+                        <input type="text" id="serie-seasonsM" placeholder="Seasons (séparés par des virgules)" class="border border-purple-600 rounded-lg px-3 py-2 outline-0">
                         <p id="error-serie-seasonsM" class="text-red-400 text-sm"></p>
                         </div>
                     <div class="flex flex-col bg-brand-soft gap-2 p-1 rounded-full mt-3 mb-2">

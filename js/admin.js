@@ -203,7 +203,7 @@ async function afficherTout() {
             const btnUpdateSerie = e.target.closest("#btn-update-serie");
 
             if(!btnUpdateSerie) return; 
-            
+
             e.preventDefault();
             const id = btnUpdateSerie.dataset.id;
 
