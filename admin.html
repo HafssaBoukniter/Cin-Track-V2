@@ -62,7 +62,7 @@
             <section id="admin-pagination" class="flex justify-center items-center gap-3 mt-8"></section>
         </section>
 
-        <!--favorites-->  
+        <!--form-->  
         <aside id="aside" class="w-full h-fit bg-purple-800 border border-purple-700 rounded-xl px-5 py-3">
             <h2 class="text-xl font-bold border-b border-purple-600 p-4">Ajouter Contenu</h2>
             <div class="flex border border-purple-700 bg-brand-soft p-1 rounded-full mt-3 mb-4">
@@ -75,85 +75,93 @@
             </div>
             <form id="movie-content" class="flex flex-col border border-purple-700 rounded-xl p-2">
                 <div class="flex flex-col bg-brand-soft p-1 gap-2 rounded-full mb-2">
-                    <label for="title">Titre</label>
-                    <input type="text" id="title" placeholder="" class="border border-purple-600 rounded-lg px-3 py-2 outline-0">
+                    <label for="movie-title">Titre</label>
+                    <input type="text" id="movie-title" placeholder="Titre" class="border border-purple-600 rounded-lg px-3 py-2 outline-0">
+                    <p id="error-movie-title" class="text-red-400 text-sm"></p>
                 </div>
                 <div class="flex flex-col bg-brand-soft gap-2 p-1 rounded-full mt-3 mb-2">
-                    <label for="type">Type</label>
-                    <input type="text" id="type" placeholder="" class="border border-purple-600 rounded-lg px-3 py-2 outline-0">
+                    <label for="movie-year">Année</label>
+                    <input type="number" id="movie-year" placeholder="Année" class="border border-purple-600 rounded-lg px-3 py-2 outline-0">
+                    <p id="error-movie-year" class="text-red-400 text-sm"></p>
                 </div>
                 <div class="flex flex-col bg-brand-soft gap-2 p-1 rounded-full mt-3 mb-2">
-                    <label for="year">Année</label>
-                    <input type="number" id="year" class="border border-purple-600 rounded-lg px-3 py-2 outline-0">
+                    <label for="movie-duration">Durée (minutes)</label>
+                    <input type="number" placeholder="Durée" id="movie-duration" class="border border-purple-600 rounded-lg px-3 py-2 outline-0">
+                    <p id="error-movie-duration" class="text-red-400 text-sm"></p>
                 </div>
                 <div class="flex flex-col bg-brand-soft gap-2 p-1 rounded-full mt-3 mb-2">
-                    <label for="duration">Durée</label>
-                    <input type="number" id="duration" class="border border-purple-600 rounded-lg px-3 py-2 outline-0">
+                    <label for="movie-image">Image</label>
+                    <input type="text" id="movie-image" placeholder="Image URL" class="border border-purple-600 rounded-lg px-3 py-2 outline-0">
+                    <p id="error-movie-image" class="text-red-400 text-sm"></p>
                 </div>
                 <div class="flex flex-col bg-brand-soft gap-2 p-1 rounded-full mt-3 mb-2">
-                    <label for="image">Image</label>
-                    <input type="text" id="image" class="border border-purple-600 rounded-lg px-3 py-2 outline-0">
+                    <label for="movie-description">Description</label>
+                    <input type="text" id="movie-description" placeholder="Description" class="border border-purple-600 rounded-lg px-3 py-2 outline-0">
                 </div>
                 <div class="flex flex-col bg-brand-soft gap-2 p-1 rounded-full mt-3 mb-2">
-                    <label for="discription">Discription</label>
-                    <input type="text" id="discription" class="border border-purple-600 rounded-lg px-3 py-2 outline-0">
+                    <label for="movie-genre">Genre</label>
+                    <input name="movie-genre" id="movie-genre" placeholder="Genres (séparés par des virgules)"  class="border border-purple-600 rounded-lg px-3 py-2 outline-0">
                 </div>
                 <div class="flex flex-col bg-brand-soft gap-2 p-1 rounded-full mt-3 mb-2">
-                    <label for="genre">Genre</label>
-                    <select name="genre" id="genre" class="border border-purple-600 rounded-lg px-3 py-2 outline-0"></select>
+                    <label for="movie-directors">Directeur</label>
+                    <input placeholder="Directeur (séparés par des virgules)" id="movie-directors" gap-2 class="border border-purple-600 rounded-lg px-3 py-2 outline-0">
                 </div>
                 <div class="flex flex-col bg-brand-soft gap-2 p-1 rounded-full mt-3 mb-2">
-                    <label for="directors">Directeur</label>
-                    <select name="genre" id="directors" gap-2 class="border border-purple-600 rounded-lg px-3 py-2 outline-0"></select>
+                    <label for="movie-productionCountries">Pays producteurs</label>
+                    <input placeholder="Pays producteurs (séparés par des virgules)" id="movie-productionCountries" class="border border-purple-600 rounded-lg px-3 py-2 outline-0">
                 </div>
-                <div class="flex flex-col bg-brand-soft gap-2 p-1 rounded-full mt-3 mb-2">
-                    <label for="productionCountries">Pays producteurs</label>
-                    <select name="genre" id="productionCountries" class="border border-purple-600 rounded-lg px-3 py-2 outline-0"></select>
-                </div>
-
+                <button type="submit" id="submit-movie" class="bg-purple-700 hover:bg-purple-800 text-white font-semibold rounded-lg px-4 py-2 mt-4 transition">
+                    Ajouter le film
+                </button>
             </form>
-            <form id="serie-content" class="hidden">
-                <div>
-                    <label for="title"></label>
-                    <input type="text" id="title">
+            <form id="series-content" class="hidden flex flex-col border border-purple-700 rounded-xl p-2">
+                <div class="flex flex-col bg-brand-soft p-1 gap-2 rounded-full mb-2">
+                    <label for="serie-title">Titre</label>
+                    <input type="text" id="serie-title" placeholder="Titre" class="border border-purple-600 rounded-lg px-3 py-2 outline-0">
+                <p id="error-serie-title" class="text-red-400 text-sm"></p>
                 </div>
-                <div>
-                    <label for="type"></label>
-                    <input type="text" id="type">
+                <div class="flex flex-col bg-brand-soft gap-2 p-1 rounded-full mt-3 mb-2">
+                    <label for="serie-year">Année</label>
+                    <input type="number" id="serie-year" placeholder="Année" class="border border-purple-600 rounded-lg px-3 py-2 outline-0">
+                    <p id="error-serie-year" class="text-red-400 text-sm"></p>
                 </div>
-                <div>
-                    <label for="year"></label>
-                    <input type="number" id="year">
+                <div class="flex flex-col bg-brand-soft gap-2 p-1 rounded-full mt-3 mb-2">
+                    <label for="serie-seasons">Seasons</label>
+                    <input type="number" id="serie-seasons" placeholder="Seasons (séparés par des virgules)" class="border border-purple-600 rounded-lg px-3 py-2 outline-0">
+                    <p id="error-serie-seasons" class="text-red-400 text-sm"></p>
                 </div>
-                <div>
-                    <label for="duration"></label>
-                    <input type="number" id="duration">
+                <div class="flex flex-col bg-brand-soft gap-2 p-1 rounded-full mt-3 mb-2">
+                    <label for="serie-image">Image</label>
+                    <input type="text" id="serie-image" placeholder="Image URL" class="border border-purple-600 rounded-lg px-3 py-2 outline-0">
                 </div>
-                <div>
-                    <label for="image"></label>
-                    <input type="text" id="image">
+                <div class="flex flex-col bg-brand-soft gap-2 p-1 rounded-full mt-3 mb-2">
+                    <label for="serie-description">Description</label>
+                    <input type="text" id="serie-description" placeholder="Description" class="border border-purple-600 rounded-lg px-3 py-2 outline-0">
                 </div>
-                <div>
-                    <label for="discription"></label>
-                    <input type="text" id="discription">
+                <div class="flex flex-col bg-brand-soft gap-2 p-1 rounded-full mt-3 mb-2">
+                    <label for="serie-genre">Genre</label>
+                    <input id="serie-genre" placeholder="Genres (séparés par des virgules)" class="border border-purple-600 rounded-lg px-3 py-2 outline-0">
                 </div>
-                <div>
-                    <label for="genre"></label>
-                    <select name="genre" id="genre"></select>
+                <div class="flex flex-col bg-brand-soft gap-2 p-1 rounded-full mt-3 mb-2">
+                    <label for="serie-directors">Directeur</label>
+                    <input placeholder="Directeur (séparés par des virgules)"  id="serie-directors" gap-2 class="border border-purple-600 rounded-lg px-3 py-2 outline-0">
                 </div>
-                <div>
-                    <label for="directors"></label>
-                    <select name="genre" id="directors"></select>
+                <div class="flex flex-col bg-brand-soft gap-2 p-1 rounded-full mt-3 mb-2">
+                    <label for="serie-productionCountries">Pays producteurs</label>
+                    <input placeholder="Pays producteurs (séparés par des virgules)" id="serie-productionCountries" class="border border-purple-600 rounded-lg px-3 py-2 outline-0">
                 </div>
-                <div>
-                    <label for="productionCountries"></label>
-                    <select name="genre" id="productionCountries"></select>
-                </div>
-
+                <button type="submit" id="submit-serie" class="bg-purple-700 hover:bg-purple-800 text-white font-semibold rounded-lg px-4 py-2 mt-4 transition">
+                    Ajouter la série
+                </button>
             </form>
             <!--message-->
             <p id="message" class="hidden text-center text-gray-400 py-12"></p>
         </aside>
+
+        <!--modal Modifier-->
+        <div id="modal" class="hidden p-6">
+        
+        </div>
     </main>
 
     <!--footer-->
