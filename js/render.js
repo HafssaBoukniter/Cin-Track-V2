@@ -1,3 +1,7 @@
+import { getComments, createComments } from "./api.js";
+import { validerComment } from "./validation.js";
+
+
 export function renderCard(cinetrack,favList = []){
     const cards = document.getElementById("cards");
 
@@ -30,99 +34,172 @@ export function renderCard(cinetrack,favList = []){
     }).join("");
 }
 
-export function renderModule(cinetrack){
+export async function renderModule(cinetrack){
     const module = document.getElementById("module");
 
     module.classList.remove("hidden");
     module.classList.add("fixed", "inset-0",  "z-50",  "bg-black/80", "backdrop-blur-sm", "flex", "items-center", "justify-center", "p-7");
 
     module.innerHTML = `
-        <div  class="card relative bg-purple-900 border border-purple-600 items-center rounded-2xl w-full max-w-[90vh]">
-            <button id="close-module" class="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-purple-800 hover:bg-purple-600 transition">
-                <i class="fa-solid fa-xmark text-xl"></i>
-            </button>
+        <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
+            <div class="card relative bg-purple-900 border-2 border-purple-500 rounded-4xl w-full max-w-5xl mx-auto overflow-hidden max-h-[95vh] overflow-y-auto">
+                <button id="close-module"
+                    class="absolute top-5 right-5 z-30 w-12 h-12 rounded-full bg-purple-600 hover:bg-purple-500 transition text-white text-2xl">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
 
-            <h2 class="text-3xl text-center mt-3 font-bold mb-1.5">${cinetrack.title}</h2>
+                <div class="relative">
+                    <div class="relative z-10 p-8 pt-20">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-5 items-center">
+                            <div class="md:col-span-1">
+                                <img src="${cinetrack.image}" class="w-full max-w-70 mx-auto h-fit object-cover rounded-xl">
+                            </div>
+                            <div class="md:col-span-2 text-white">
+                                <h2 class="text-xl md:text-2xl font-bold mb-4">
+                                    ${cinetrack.title}
+                                </h2>
+                                <div class="flex items-center gap-3 mb-8">
+                                    <span class="bg-purple-600 px-5 py-2 rounded-xl font-bold capitalize">
+                                        ${cinetrack.type}
+                                    </span>
+                                    <span class="text-lg">
+                                        <i class="fa-regular fa-calendar mr-2"></i>
+                                        ${cinetrack.releaseYear}
+                                    </span>
+                                </div>
+                                <div class="grid grid-cols-2 gap-3">
+                                    <div>
+                                        <p class="text-purple-400 font-bold text-lg mb-1">
+                                            ${cinetrack.type == "series"
+                                                ? '<i class="fa-solid fa-tv mr-2"></i>Seasons'
+                                                : '<i class="fa-regular fa-clock mr-2"></i>Duration'}
+                                        </p>
 
-            <div id="module-body" class="p-6 flex items-center gap-4">
-                <div>
-                    <img src="${cinetrack.image}" class="w-full h-105 rounded-xl">
-                </div>
-                <div class="flex flex-col mb-6">
-                    <div class="flex items-center gap-4 mb-6">
-                        <span class="bg-purple-600 px-4 py-1 rounded-full text-sm">
-                            ${cinetrack.type}
-                        </span>
-                        <span class="text-gray-300">
-                            <i class="fa-regular fa-calendar mr-2"></i>
-                            ${cinetrack.releaseYear}
-                        </span>
-                    </div>
-                    ${cinetrack.type == "series" ? `
-                        <div class="mb-4">
-                            <p class="text-purple-400 font-semibold mb-1">
-                                <i class="fa-solid fa-tv mr-2"></i>
-                                seasons
-                            </p>
-                            <p class="text-gray-300">
-                                ${cinetrack.seasons.join(", ")}
-                            </p>
+                                        <p class="text-gray-200">
+                                            ${cinetrack.type == "series"
+                                                ? cinetrack.seasons.join(", ")
+                                                : `${Math.floor(cinetrack.duration / 60)} h ${cinetrack.duration % 60} min`}
+                                        </p>
+                                    </div>
+                                    <div>
+                                        <p class="text-purple-400 font-bold text-lg mb-1">
+                                            <i class="fa-solid fa-tag mr-2"></i>
+                                            Genres
+                                        </p>
+                                        <p class="text-gray-200">
+                                            ${cinetrack.genres.join(", ")}
+                                        </p>
+                                    </div>
+                                    <div>
+                                        <p class="text-purple-400 font-bold text-lg mb-1">
+                                            <i class="fa-solid fa-user-tie mr-2"></i>
+                                            Directors
+                                        </p>
+
+                                        <p class="text-gray-200">
+                                            ${cinetrack.directors.join(", ")}
+                                        </p>
+                                    </div>
+                                    <div>
+                                        <p class="text-purple-400 font-bold text-lg mb-1">
+                                            <i class="fa-solid fa-earth-americas mr-2"></i>
+                                            Production countries
+                                        </p>
+                                        <p class="text-gray-200">
+                                            ${cinetrack.productionCountries.join(", ")}
+                                        </p>
+                                    </div>
+
+                                </div>
+                                <div class="border-t border-purple-500 mt-6 pt-5">
+                                    <h3 class="font-bold text-xl mb-2">
+                                        <i class="fa-solid fa-file-lines text-purple-400 mr-2"></i>
+                                        Description
+                                    </h3>
+                                    <p class="text-gray-300 leading-relaxed">
+                                        ${cinetrack.description}
+                                    </p>
+                                </div>
+                            </div>
                         </div>
-                    ` : `
-                        <div class="mb-4">
-                            <p class="text-purple-400 font-semibold mb-1">
-                                <i class="fa-regular fa-clock"></i>
-                                Duration
-                            </p>
-                            <p class="text-gray-300">
-                                ${Math.floor(cinetrack.duration/60)} h ${Math.floor(cinetrack.duration%60)} min
-                            </p>
-                        </div>
-                    `}
-                    
-                    <div class="mb-4">
-                        <p class="text-purple-400 font-semibold mb-1">
-                            <i class="fa-solid fa-tags mr-2"></i>
-                            Genres
-                        </p>
-                        <p class="text-gray-300">
-                            ${cinetrack.genres.join(", ")}
-                        </p>  
-                    </div>
-                    <div class="mb-4">
-                        <p class="text-purple-400 font-semibold mb-1">
-                            <i class="fa-solid fa-user-tie mr-2"></i>
-                            Directors
-                        </p>
-                        <p class="text-gray-300">
-                            ${cinetrack.directors.join("")}
-                        </p>  
-                    </div>
-                    <div class="mb-4">
-                        <p class="text-purple-400 font-semibold mb-1">
-                            <i class="fa-solid fa-globe mr-2"></i>
-                            Production contries
-                        </p>
-                        <p class="text-gray-300">
-                            ${cinetrack.productionCountries.join(" ")}
-                        </p>  
                     </div>
                 </div>
-            </div>
-            <div class="mb-4 px-5">
-                <p class="text-purple-400 font-semibold mb-1">
-                    Description
-                </p>
-                <p class="text-gray-300">
-                    ${cinetrack.description}
-                </p>  
+
+                <div class="border-t border-purple-600 p-5 md:p-7">
+                    <h3 class="text-xl font-bold text-white mb-5">
+                        <i class="fa-solid fa-comments text-purple-400 mr-3"></i>
+                        Commentaire (<span id="comments-count">0</span>)
+                    </h3>
+                    <div id="comments-list" class="flex flex-col gap-2 mb-4">
+                        
+                    </div>
+                    <form id="comment-form" class="flex flex-col gap-2">
+                        <h4 class="text-xl font-bold text-white">
+                            <i class="fa-solid fa-pen text-purple-400 mr-2"></i>
+                            Ajouter un commantaire
+                        </h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                            <div class="relative">
+                                <i class="fa-solid fa-user absolute left-4 top-5 text-purple-400"></i>
+                                <input type="text" id="comment-author" placeholder="Votre nom..." class="w-full pl-12 p-4 rounded-xl bg-purple-900 border border-purple-600 text-white placeholder-purple-200 outline-none focus:border-purple-400">
+                                <p id="error-comment-nom" class="text-red-400 text-sm"></p>
+                            </div>
+                            <div class="relative">
+                                <i class="fa-solid fa-comment-dots absolute left-4 top-5 text-purple-400"></i>
+                                <textarea id="comment-text" rows="1" placeholder="Votre commentaire..." class="w-full pl-12 p-4 rounded-xl bg-purple-900/60 border border-purple-600 text-white placeholder-purple-200 outline-none focus:border-purple-400 resize-none"></textarea>
+                                <p id="error-comment-text" class="text-red-400 text-sm"></p>
+                            </div>
+                        </div>
+                        <p id="comment-error" class="text-red-400 text-sm"></p>
+                        <button type="submit" class="w-full bg-purple-600 hover:bg-purple-500 transition rounded-xl py-4 text-white font-bold text-lg">
+                            <i class="fa-solid fa-paper-plane mr-2"></i>
+                            Add comment
+                        </button>
+                    </form>
+                </div>
             </div>
         </div>
     `;
 
     document.getElementById("close-module").addEventListener("click", ()=>{
         module.classList.add("hidden");
-    })
+    });
+
+    const formComments = document.getElementById("comment-form");
+    const commentAuthor = document.getElementById("comment-author");
+    const commentText = document.getElementById("comment-text");
+    const errorNom = document.getElementById("error-comment-nom");
+    const errorText = document.getElementById("error-comment-text");
+    
+
+    formComments.addEventListener("submit" ,async (e)=>{
+        e.preventDefault();
+
+        const data ={
+            author: commentAuthor.value.trim(),
+            text: commentText.value.trim(),
+            createdAt: new Date()
+        }
+
+        const error = validerComment(data);
+
+        errorText.textContent = error.text || "";
+        errorNom.textContent = error.author || "";
+
+        if(Object.keys(error).length > 0) return;
+
+        try{
+            await createComments(cinetrack.id,data);
+
+            await chargerComments(cinetrack.id);
+
+            formComments.reset();
+        }catch(error){
+            console.log(error);
+        }
+    });
+
+    await chargerComments(cinetrack.id);
 };
 
 export function rechercheFiltrer(cinetrack,typeBtn="tous"){
@@ -217,4 +294,53 @@ export function renderFavs(favs){
             </div>
         `;
     }).join("");
+}
+
+async function chargerComments(id){
+    const commentList = document.getElementById("comments-list");
+    const countComment = document.getElementById("comments-count");
+
+    commentList.innerHTML=`
+        <p class="text-gray-300 text-center">
+            <i class="fa-solid fa-spinner fa-spin mr-2"></i>
+            chargement...
+        </p>
+    `;
+
+    try{
+        const comments = await getComments(id);
+
+        const filtredComments = comments.filter(comment => comment.contentId == id);
+        
+        renderComments(filtredComments);
+
+        countComment.textContent = filtredComments.length;
+    }catch(error){
+        commentList.innerHTML=`
+            <p class="text-red-400 text-center"> Erreur lors des commantaire.</p>
+        `;
+    }
+}
+
+function renderComments(comments){
+    const commentList = document.getElementById("comments-list");
+
+    if(comments.length === 0){
+        commentList.innerHTML =`
+            <p class="text-gray-400 text-center">
+                Aucun commentaire
+            </p>
+        `;
+        return;
+    }
+
+    commentList.innerHTML=comments.map(comment =>`
+        <div class="bg-purple-800 p-3 rounded-xl">
+            <div class="flex justify-between items-center mb-2">
+                <p class="font-semibold text-purple-300">${comment.author}</p>
+                <span class="text-gray-400 text-xs">${new Date(comment.createdAt).toLocaleDateString("fr-FR")}</span>
+            </div>
+            <p class="text-gray-300">${comment.text}</p>
+        </div>
+    `).join("");
 }

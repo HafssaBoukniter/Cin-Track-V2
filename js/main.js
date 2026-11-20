@@ -1,6 +1,6 @@
 import { getFavorites,sauvegarderfavorites } from "./store.js";
 import { renderPagination, rechercheFiltrer, renderCard, renderModule, renderFavs } from "./render.js";
-import { getContents,getComments } from "./api.js";
+import { getContents } from "./api.js";
 
 let pageActuelle = 1;
 const limit = 8;

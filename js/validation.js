@@ -1,5 +1,5 @@
 const erreur = {};
-const currentYear = new Date().getFullYear;
+const currentYear = new Date().getFullYear();
 
 export function validerMovie(data){
     if(!data.title.trim()){
@@ -50,6 +50,18 @@ export function validerSerie(data){
         if(data.seasons.some(s => s==="" || Number(s) <= 0)){
             erreur.seasons = "Veuillez saisir des saisons valides.";
         }
+    }
+
+    return erreur;
+}
+
+export function validerComment(data){
+    if(data.author == ""){
+        erreur.author ="Le nom est obligatoir !";
+    }
+
+    if(data.text == ""){
+        erreur.text ="Le commantaire est obligatoir !";
     }
 
     return erreur;
