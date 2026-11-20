@@ -2,6 +2,7 @@ import {getContents,createContent,updateContent,deleteContent} from "./api.js";
 import { getFavorites, sauvegarderfavorites } from "./store.js";
 import { rendreModalModifier, rendreTable } from "./ui.js";
 import { validerMovie,validerSerie } from "./validation.js";
+import { renderPagination } from "./render.js";
 
 const movieBtn = document.getElementById("movie-form");
 const serieBtn = document.getElementById("serie-form");
@@ -20,6 +21,9 @@ const errorSerieSeasons = document.getElementById("error-serie-seasons");
 const errorSerieImage = document.getElementById("error-serie-image");
 
 const favs = getFavorites();
+let currentPage = 1;
+const limit = 8;
+let items = [];
 
 async function afficherTout() {
     const loading = document.getElementById("loading");
@@ -27,9 +31,8 @@ async function afficherTout() {
     loading.classList.remove("hidden");
 
     try{
-        let items = await getContents();
+        items = await getContents();
         console.table(items);
-        rendreTable(items);
 
         document.addEventListener("click", async (e) =>{
             const btn = e.target.closest(".btn-supp");
@@ -47,7 +50,11 @@ async function afficherTout() {
             await deleteContent(item.id);
             items = items.filter(i => i.id !== item.id);
 
-            rendreTable(items);
+            const totalPages = Math.ceil(items.length / limit);
+
+            if(currentPage > totalPages) currentPage = totalPages || 1;
+
+            afficherContenus();
 
             const res = favs.find(fav =>fav.title === item.title);
             if(res){
@@ -98,7 +105,7 @@ async function afficherTout() {
 
                 items = content;
 
-                rendreTable(content);
+                afficherContenus();
 
                 movieContent.reset();
             }catch(error){
@@ -135,8 +142,8 @@ async function afficherTout() {
                 const content = await getContents();
 
                 items = content;
-
-                rendreTable(content);
+                currentPage = 1;
+                afficherContenus();
 
                 serieContent.reset();
             }catch(error){
@@ -188,7 +195,7 @@ async function afficherTout() {
                 const res = favs.find(fav =>fav.title === item.title);
                 if (res) {
                     let index = favs.findIndex(fav => fav.title === res.title);
-                    favs[index] = item;
+                    favs[index] = update;
                     sauvegarderfavorites(favs);
                 }
 
@@ -198,7 +205,7 @@ async function afficherTout() {
 
                 items = content;
 
-                rendreTable(content);
+                afficherContenus();
 
                 message.textContent = "Film modifié avec succès !";
                 message.classList.remove("hidden");
@@ -244,8 +251,8 @@ async function afficherTout() {
                 const content = await getContents();
 
                 items = content;
-
-                rendreTable(content);
+                currentPage = 1;
+                afficherContenus();
 
                 message.textContent = "Série modifié avec succès !";
                 message.classList.remove("hidden");
@@ -276,6 +283,29 @@ async function afficherTout() {
             img.src=link.value
 
         });
+
+        function afficherContenus(){
+            const totalPages = Math.ceil(items.length / limit);
+
+            const start = (currentPage -1) * limit;
+            const contenusPage = items.slice(start,start + limit);
+
+            rendreTable(contenusPage);
+
+            renderPagination(currentPage,totalPages);
+        }
+
+        afficherContenus();
+
+        document.getElementById("pagination").addEventListener("click",e =>{
+            const btn = e.target.closest("button");
+
+            if(!btn) return;
+
+            currentPage = Number(btn.dataset.page);
+
+            afficherContenus();
+        })
 
     }catch(error){
         console.error(error);
