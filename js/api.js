@@ -6,7 +6,7 @@ export async function request(path,options = {}) {
             headers : {"Content-type" : "application/json"},
             ...options
         });
-
+        
         if (!response.ok) {
             throw new Error("error");
         }

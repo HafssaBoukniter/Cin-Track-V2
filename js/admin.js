@@ -1,4 +1,5 @@
 import {getContents,createContent,updateContent,deleteContent} from "./api.js";
+import { getFavorites, sauvegarderfavorites } from "./store.js";
 import { rendreModalModifier, rendreTable } from "./ui.js";
 import { validerMovie,validerSerie } from "./validation.js";
 
@@ -17,6 +18,8 @@ const errorSerieTitle = document.getElementById("error-serie-title");
 const errorSerieYear = document.getElementById("error-serie-year");
 const errorSerieSeasons = document.getElementById("error-serie-seasons");
 const errorSerieImage = document.getElementById("error-serie-image");
+
+const favs = getFavorites();
 
 async function afficherTout() {
     const loading = document.getElementById("loading");
@@ -37,14 +40,21 @@ async function afficherTout() {
 
             const id = btn.dataset.id;
             const item = items.find(i => i.id == id);
-
+            
             if(!item) return;
-
+                
             if(!confirm(`Supprimer  « ${item.title} » ?`)) return;
             await deleteContent(item.id);
             items = items.filter(i => i.id !== item.id);
 
             rendreTable(items);
+
+            const res = favs.find(fav =>fav.title === item.title);
+            if(res){
+                let index=favs.findIndex(fav=>fav.title===res.title)
+                favs.splice(index,1)
+                sauvegarderfavorites(favs); 
+            }
         });
 
         movieBtn.addEventListener("click",() =>{
@@ -175,6 +185,13 @@ async function afficherTout() {
                     ...data
                 };
 
+                const res = favs.find(fav =>fav.title === item.title);
+                if (res) {
+                    let index = favs.findIndex(fav => fav.title === res.title);
+                    favs[index] = item;
+                    sauvegarderfavorites(favs);
+                }
+
                 await updateContent(id,update);
 
                 const content = await getContents();
@@ -244,6 +261,20 @@ async function afficherTout() {
                     message.classList.add("hidden");
                 }, 3000);
             }
+        });
+
+        const link = document.getElementById("movie-image");
+        link.addEventListener("input",()=>{
+            if(!link.value)return
+            let img = new Image()
+            img.onload=()=>{
+                document.getElementById("previewImage").src=link.value
+            }
+            img.onerror=()=>{
+                document.getElementById("previewImage").src="https://placehold.co/400x600/1f1b2e/ffffff?text=No+Image+Available"
+            }
+            img.src=link.value
+
         });
 
     }catch(error){
