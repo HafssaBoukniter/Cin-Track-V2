@@ -42,7 +42,7 @@ export async function renderModule(cinetrack){
 
     module.innerHTML = `
         <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
-            <div class="card relative bg-purple-900 border-2 border-purple-500 rounded-4xl w-full max-w-5xl mx-auto overflow-hidden max-h-[95vh] overflow-y-auto">
+            <div class="card relative bg-purple-900 border-2 border-purple-500 rounded-xl w-full max-w-5xl mx-auto overflow-hidden max-h-[95vh] overflow-y-auto scrollbar-thin scrollbar-thumb-violet-200/50 ">
                 <button id="close-module"
                     class="absolute top-5 right-5 z-30 w-12 h-12 rounded-full bg-purple-600 hover:bg-purple-500 transition text-white text-2xl">
                     <i class="fa-solid fa-xmark"></i>
@@ -308,16 +308,23 @@ async function chargerComments(id){
     `;
 
     try{
-        const comments = await getComments(id);
+        const comments = await getComments(id) || [];
 
         const filtredComments = comments.filter(comment => comment.contentId == id);
         
         renderComments(filtredComments);
-
         countComment.textContent = filtredComments.length;
     }catch(error){
-        commentList.innerHTML=`
-            <p class="text-red-400 text-center"> Erreur lors des commantaire.</p>
+        if (error.message === "error") {
+            renderComments([]);
+            countComment.textContent = 0;
+            return;
+        }
+
+        commentList.innerHTML = `
+            <p class="text-red-400 text-center">
+                Erreur lors du chargement des commentaires.
+            </p>
         `;
     }
 }
